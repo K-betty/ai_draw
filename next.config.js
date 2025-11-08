@@ -9,6 +9,5 @@ const nextConfig = {
     serverActions: true,
   },
 }
-asdfa
 module.exports = nextConfig
 
