@@ -51,3 +51,22 @@ body {
   background: #555;
 }
 
+/* 确保输入框可正常交互 */
+input, textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* 确保输入框文本可见 */
+input, textarea {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+

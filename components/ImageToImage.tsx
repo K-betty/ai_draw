@@ -59,12 +59,16 @@ export default function ImageToImage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || '生成图片失败')
+        const errorMessage = data.error || '生成图片失败'
+        const errorHint = data.hint || ''
+        throw new Error(errorHint ? `${errorMessage}\n提示: ${errorHint}` : errorMessage)
       }
 
       setResult(data.imageUrl)
     } catch (err: any) {
-      setError(err.message || '生成图片时发生错误')
+      const errorMessage = err.message || '生成图片时发生错误'
+      setError(errorMessage)
+      console.error('生成图片错误:', err)
     } finally {
       setLoading(false)
     }
@@ -167,7 +171,15 @@ export default function ImageToImage() {
         {/* 错误提示 */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            {error}
+            <div className="flex items-start">
+              <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1">
+                <p className="font-medium">错误</p>
+                <p className="text-sm mt-1 whitespace-pre-line">{error}</p>
+              </div>
+            </div>
           </div>
         )}
 
