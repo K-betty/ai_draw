@@ -1,15 +1,20 @@
+# Netlify 配置文件
+# 注意：项目在仓库根目录，不需要设置 base
+
 [build]
-  # 项目在根目录，不需要 base（留空或删除）
+  # 构建命令
   command = "npm run build"
-  # Next.js 插件会自动处理 publish 目录，不需要手动设置
+  # 发布目录由 Next.js 插件自动处理，不需要手动设置
   # publish = ".next"
 
-# Node.js 版本（使用 .nvmrc 文件或这里指定）
+# 构建环境变量
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--legacy-peer-deps"
+  # 确保使用正确的 Node 版本
+  NPM_CONFIG_PRODUCTION = "false"
 
-# Next.js 插件（必需，用于支持 Next.js API Routes）
+# Next.js 插件（必需，用于支持 Next.js API Routes 和 SSR）
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
