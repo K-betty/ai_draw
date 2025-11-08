@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 
+# 注意：不要忽略 lockfile，Netlify 需要它来确保依赖版本一致
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
 # testing
 /coverage
 

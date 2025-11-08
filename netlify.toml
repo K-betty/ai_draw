@@ -4,11 +4,12 @@
   # Next.js 插件会自动处理 publish 目录，不需要手动设置
   # publish = ".next"
 
+# Node.js 版本（使用 .nvmrc 文件或这里指定）
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
+
 # Next.js 插件（必需，用于支持 Next.js API Routes）
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Node.js 版本（可选）
-[build.environment]
-  NODE_VERSION = "18"
 
