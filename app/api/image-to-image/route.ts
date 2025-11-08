@@ -98,7 +98,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           error: '未配置AI生图API。请设置 REPLICATE_API_TOKEN 或 STABILITY_API_KEY 环境变量',
-          hint: '查看 README.md 了解如何配置API密钥'
+          hint: '查看 NETLIFY_API_CONFIG.md 了解如何在 Netlify 中配置API密钥，或查看 ENV_VARIABLES.md 了解完整配置指南',
+          docs: {
+            netlify: 'NETLIFY_API_CONFIG.md',
+            env: 'ENV_VARIABLES.md',
+            readme: 'README.md'
+          }
         },
         { status: 400 }
       )
