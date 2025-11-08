@@ -1,0 +1,36 @@
+# Vercel 环境变量配置示例
+# 在 Vercel 项目设置中添加这些环境变量
+
+# OpenAI API（用于 DALL-E 和提示词优化）
+OPENAI_API_KEY=sk-proj-...
+
+# DALL-E 配置（可选）
+DALL_E_MODEL=dall-e-3
+DALL_E_QUALITY=hd
+DALL_E_SIZE=1024x1024
+
+# Replicate API（备用）
+REPLICATE_API_TOKEN=r8_...
+
+# Stability AI API（备用）
+STABILITY_API_KEY=sk-...
+
+# 图片存储配置（Vercel 必须使用外部存储）
+STORAGE_TYPE=s3
+# 或
+# STORAGE_TYPE=oss
+
+# AWS S3 配置（如果使用 S3）
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=your-bucket-name
+STORAGE_BASE_URL=https://your-cdn-domain.com
+
+# 阿里云 OSS 配置（如果使用 OSS）
+OSS_ACCESS_KEY_ID=...
+OSS_ACCESS_KEY_SECRET=...
+OSS_REGION=oss-cn-hangzhou
+OSS_BUCKET=your-bucket-name
+OSS_ENDPOINT=https://oss-cn-hangzhou.aliyuncs.com
+
