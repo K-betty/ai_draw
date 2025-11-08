@@ -19,7 +19,7 @@ export default function Home() {
             AI Draw
           </h1>
           <p className="text-gray-600 text-lg">
-            智能生图平台 - 文生图、图生图、人物换脸
+            智能生图平台1 - 文生图、图生图、人物换脸
           </p>
         </header>
 
