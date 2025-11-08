@@ -1,0 +1,14 @@
+[build]
+  # 项目在根目录，不需要 base（留空或删除）
+  command = "npm run build"
+  # Next.js 插件会自动处理 publish 目录，不需要手动设置
+  # publish = ".next"
+
+# Next.js 插件（必需，用于支持 Next.js API Routes）
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Node.js 版本（可选）
+[build.environment]
+  NODE_VERSION = "18"
+
