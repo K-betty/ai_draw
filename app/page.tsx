@@ -19,7 +19,7 @@ export default function Home() {
             AI Draw
           </h1>
           <p className="text-gray-600 text-lg">
-            智能生图平台1 - 文生图、图生图、人物换脸
+            智能生图平台 - 文生图、图生图、人物换脸
           </p>
         </header>
 
@@ -34,7 +34,7 @@ export default function Home() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              文生图1
+              文生图
             </button>
             <button
               onClick={() => setActiveTab('image')}
@@ -44,7 +44,7 @@ export default function Home() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              图生图2
+              图生图
             </button>
             <button
               onClick={() => setActiveTab('face')}
@@ -54,7 +54,7 @@ export default function Home() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              人物换脸3
+              人物换脸
             </button>
           </div>
         </div>
