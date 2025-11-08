@@ -34,7 +34,7 @@ export default function Home() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              文生图
+              文生图1
             </button>
             <button
               onClick={() => setActiveTab('image')}
@@ -44,7 +44,7 @@ export default function Home() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              图生图
+              图生图2
             </button>
             <button
               onClick={() => setActiveTab('face')}
@@ -54,7 +54,7 @@ export default function Home() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              人物换脸
+              人物换脸3
             </button>
           </div>
         </div>
