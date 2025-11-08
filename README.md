@@ -136,6 +136,18 @@ npm start
 - 在 Vercel 项目设置中配置环境变量
 - 推荐使用 AWS S3 或阿里云 OSS 存储生成的图片
 
+### Netlify 部署
+
+项目已配置好 Netlify 部署：
+
+1. **部署指南**：查看 [NETLIFY_DEPLOY.md](./NETLIFY_DEPLOY.md)
+2. **配置文件**：`netlify.toml` 已配置完成
+
+**重要提示**：
+- 确保 Base directory 留空（项目在根目录）
+- Netlify 文件系统是只读的，必须配置外部存储（S3 或 OSS）
+- 需要安装 `@netlify/plugin-nextjs` 插件（Netlify 会自动安装）
+
 ### 静态导出部署（国内 CDN）
 
 支持静态导出到国内 CDN（腾讯云、阿里云等），详见 [DEPLOY.md](./DEPLOY.md)
