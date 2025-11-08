@@ -3,8 +3,8 @@
  * 支持本地存储和对象存储（AWS S3、阿里云OSS等）
  */
 
-import fs from 'fs/promises'
-import path from 'path'
+import * as fs from 'fs/promises'
+import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 // 动态导入AWS SDK（可选依赖）
@@ -139,7 +139,7 @@ async function saveToS3(
       return `${STORAGE_BASE_URL}/${filename}`
     }
     return `https://${AWS_S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${filename}`
-  } catch (error) {
+  } catch (error: any) {
     console.error('S3上传失败，回退到本地存储:', error)
     return await saveToLocal(buffer, prefix, extension)
   }
@@ -159,9 +159,16 @@ async function saveToOSS(
   }
 
   try {
-    // 注意：需要安装 @alicloud/oss-client-sdk
-    // 这里提供一个基础实现示例
-    const OSS = require('ali-oss')
+    // 动态导入 ali-oss（可选依赖）
+    let OSS: any
+    try {
+      OSS = require('ali-oss')
+    } catch (importError) {
+      console.warn('ali-oss 未安装，回退到本地存储')
+      console.warn('如需使用 OSS，请运行: npm install ali-oss')
+      return await saveToLocal(buffer, prefix, extension)
+    }
+
     const client = new OSS({
       accessKeyId: OSS_ACCESS_KEY_ID,
       accessKeySecret: OSS_ACCESS_KEY_SECRET,
@@ -178,7 +185,7 @@ async function saveToOSS(
     })
 
     return result.url
-  } catch (error) {
+  } catch (error: any) {
     console.error('OSS上传失败，回退到本地存储:', error)
     return await saveToLocal(buffer, prefix, extension)
   }

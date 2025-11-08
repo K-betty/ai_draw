@@ -5,8 +5,8 @@
 
 import { createCanvas, loadImage } from 'canvas'
 import * as faceapi from 'face-api.js'
-import path from 'path'
-import fs from 'fs/promises'
+import * as path from 'path'
+import * as fs from 'fs/promises'
 
 export interface FaceDetection {
   x: number
@@ -22,6 +22,7 @@ const USE_FACE_API = process.env.USE_FACE_API === 'true'
 const FACE_API_MODELS_PATH = process.env.FACE_API_MODELS_PATH || path.join(process.cwd(), 'public', 'models')
 const FACE_DETECTION_API_URL = process.env.FACE_DETECTION_API_URL || ''
 const FACE_SWAP_API_URL = process.env.FACE_SWAP_API_URL || ''
+const FACE_SWAP_API_KEY = process.env.FACE_SWAP_API_KEY || ''
 
 // 是否已加载模型
 let modelsLoaded = false
