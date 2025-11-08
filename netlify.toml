@@ -1,11 +1,11 @@
 # Netlify 配置文件
-# 注意：项目在仓库根目录，不需要设置 base
+# 注意：项目在仓库根目录，base 必须为空或不设置
 
 [build]
   # 构建命令
   command = "npm run build"
-  # 发布目录由 Next.js 插件自动处理，不需要手动设置
-  # publish = ".next"
+  # 项目在根目录，base 留空（不设置）
+  # 如果 Netlify UI 中设置了错误的 base，请清除它
 
 # 构建环境变量
 [build.environment]
