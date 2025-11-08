@@ -49,11 +49,23 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     // 保存上传的图片（可选，用于调试）
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
-    await fs.mkdir(uploadsDir, { recursive: true })
-    const filename = `${uuidv4()}_${image.name}`
-    const filepath = path.join(uploadsDir, filename)
-    await writeFile(filepath, buffer)
+    // 注意：在 Netlify/Vercel 等无服务器环境中，文件系统是只读的，跳过本地保存
+    const IS_NETLIFY = process.env.NETLIFY === 'true' || process.env.NETLIFY === '1'
+    const IS_VERCEL = process.env.VERCEL === '1'
+    const IS_SERVERLESS = IS_NETLIFY || IS_VERCEL
+    
+    if (!IS_SERVERLESS) {
+      try {
+        const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+        await fs.mkdir(uploadsDir, { recursive: true })
+        const filename = `${uuidv4()}_${image.name}`
+        const filepath = path.join(uploadsDir, filename)
+        await writeFile(filepath, buffer)
+      } catch (error) {
+        // 本地保存失败时忽略（不影响主要功能）
+        console.warn('保存上传文件失败（不影响主要功能）:', error)
+      }
+    }
 
     let resultImageUrl: string
 

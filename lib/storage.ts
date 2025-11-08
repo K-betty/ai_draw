@@ -18,10 +18,12 @@ try {
 }
 
 // 存储配置
-// 检测是否在 Vercel 环境
+// 检测是否在 Vercel 或 Netlify 环境
 const IS_VERCEL = process.env.VERCEL === '1'
-// 在 Vercel 环境下，默认使用外部存储（因为文件系统是只读的）
-const STORAGE_TYPE = process.env.STORAGE_TYPE || (IS_VERCEL ? 's3' : 'local') // 'local' | 's3' | 'oss'
+const IS_NETLIFY = process.env.NETLIFY === 'true' || process.env.NETLIFY === '1'
+const IS_SERVERLESS = IS_VERCEL || IS_NETLIFY
+// 在无服务器环境下，默认使用外部存储（因为文件系统是只读的）
+const STORAGE_TYPE = process.env.STORAGE_TYPE || (IS_SERVERLESS ? 's3' : 'local') // 'local' | 's3' | 'oss'
 const STORAGE_BASE_URL = process.env.STORAGE_BASE_URL || ''
 
 // AWS S3 配置
@@ -69,9 +71,10 @@ async function saveToLocal(
   prefix: string,
   extension: string
 ): Promise<string> {
-  // 在 Vercel 环境下，尝试使用外部存储
-  if (IS_VERCEL) {
-    console.warn('Vercel 环境不支持本地文件存储，尝试使用外部存储...')
+  // 在无服务器环境下，尝试使用外部存储
+  if (IS_SERVERLESS) {
+    const platform = IS_VERCEL ? 'Vercel' : IS_NETLIFY ? 'Netlify' : '无服务器'
+    console.warn(`${platform} 环境不支持本地文件存储，尝试使用外部存储...`)
     // 如果配置了 S3，使用 S3
     if (AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY && AWS_S3_BUCKET) {
       return await saveToS3(buffer, prefix, extension)
@@ -80,11 +83,23 @@ async function saveToLocal(
     if (OSS_ACCESS_KEY_ID && OSS_ACCESS_KEY_SECRET && OSS_BUCKET) {
       return await saveToOSS(buffer, prefix, extension)
     }
-    throw new Error('Vercel 环境需要配置外部存储（S3 或 OSS）。请设置 STORAGE_TYPE=s3 或 STORAGE_TYPE=oss 并配置相应的环境变量。')
+    throw new Error(`${platform} 环境需要配置外部存储（S3 或 OSS）。请设置 STORAGE_TYPE=s3 或 STORAGE_TYPE=oss 并配置相应的环境变量。`)
   }
 
   const generatedDir = path.join(process.cwd(), 'public', 'generated', prefix)
-  await fs.mkdir(generatedDir, { recursive: true })
+  try {
+    await fs.mkdir(generatedDir, { recursive: true })
+  } catch (error: any) {
+    // 如果创建目录失败，尝试使用外部存储
+    console.warn('创建本地目录失败，尝试使用外部存储:', error.message)
+    if (AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY && AWS_S3_BUCKET) {
+      return await saveToS3(buffer, prefix, extension)
+    }
+    if (OSS_ACCESS_KEY_ID && OSS_ACCESS_KEY_SECRET && OSS_BUCKET) {
+      return await saveToOSS(buffer, prefix, extension)
+    }
+    throw new Error(`无法创建本地目录且未配置外部存储: ${error.message}`)
+  }
 
   const filename = `${uuidv4()}.${extension}`
   const filepath = path.join(generatedDir, filename)

@@ -59,17 +59,26 @@ export async function POST(request: NextRequest) {
     const targetBuffer = Buffer.from(targetBytes)
 
     // 保存上传的图片（用于调试和备份）
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
-    await fs.mkdir(uploadsDir, { recursive: true })
-
-    const sourceFilename = `${uuidv4()}_source_${sourceImage.name}`
-    const targetFilename = `${uuidv4()}_target_${targetImage.name}`
-
-    const sourcePath = path.join(uploadsDir, sourceFilename)
-    const targetPath = path.join(uploadsDir, targetFilename)
-
-    await writeFile(sourcePath, sourceBuffer).catch(() => {})
-    await writeFile(targetPath, targetBuffer).catch(() => {})
+    // 注意：在 Netlify/Vercel 等无服务器环境中，文件系统是只读的，跳过本地保存
+    const IS_NETLIFY = process.env.NETLIFY === 'true' || process.env.NETLIFY === '1'
+    const IS_VERCEL = process.env.VERCEL === '1'
+    const IS_SERVERLESS = IS_NETLIFY || IS_VERCEL
+    
+    if (!IS_SERVERLESS) {
+      try {
+        const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+        await fs.mkdir(uploadsDir, { recursive: true })
+        const sourceFilename = `${uuidv4()}_source_${sourceImage.name}`
+        const targetFilename = `${uuidv4()}_target_${targetImage.name}`
+        const sourcePath = path.join(uploadsDir, sourceFilename)
+        const targetPath = path.join(uploadsDir, targetFilename)
+        await writeFile(sourcePath, sourceBuffer).catch(() => {})
+        await writeFile(targetPath, targetBuffer).catch(() => {})
+      } catch (error) {
+        // 本地保存失败时忽略（不影响主要功能）
+        console.warn('保存上传文件失败（不影响主要功能）:', error)
+      }
+    }
 
     // 检测人脸
     let sourceFaces, targetFaces
